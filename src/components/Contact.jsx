@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, Send } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Phone, Send, Copy, Check } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { profile } from "../data/profile";
 import SectionHeader from "./SectionHeader";
+import Toast from "./Toast";
 import { revealUp } from "../hooks/useReveal";
 
 const socials = [
@@ -15,19 +16,56 @@ const socials = [
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const submit = (e) => {
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = "Invalid email";
+    if (!form.message.trim()) newErrors.message = "Message is required";
+    else if (form.message.length < 10) newErrors.message = "Message must be at least 10 characters";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const submit = async (e) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Portfolio inquiry from ${form.name}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`
-    );
-    const mailLink = document.createElement("a");
-    mailLink.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-    mailLink.click();
-    setSent(true);
-    setForm({ name: "", email: "", message: "" });
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch("https://formspree.io/f/xyzpqwer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+        }),
+      });
+
+      if (response.ok) {
+        setToast({ message: "Message sent! Alwin will get back to you soon.", type: "success" });
+        setForm({ name: "", email: "", message: "" });
+        setErrors({});
+      } else {
+        setToast({ message: "Failed to send. Please try again.", type: "error" });
+      }
+    } catch {
+      setToast({ message: "Network error. Please try again.", type: "error" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyEmailToClipboard = () => {
+    navigator.clipboard.writeText(profile.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2000);
   };
 
   return (
@@ -57,6 +95,24 @@ export default function Contact() {
               </a>
             ))}
           </div>
+          
+          <motion.button
+            onClick={copyEmailToClipboard}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg border border-cyan/40 bg-cyan/10 px-4 py-3 font-mono text-xs uppercase tracking-widest text-cyan hover:border-cyan hover:bg-cyan/20 transition-colors"
+          >
+            {copiedEmail ? (
+              <>
+                <Check className="h-4 w-4" /> Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="h-4 w-4" /> Copy Email
+              </>
+            )}
+          </motion.button>
+          
           <p className="mt-6 font-mono text-[11px] text-ink-faint">{profile.location}</p>
         </motion.div>
 
@@ -70,46 +126,66 @@ export default function Contact() {
         >
           <h3 className="mb-6 font-display text-lg font-semibold text-ink">Send a Message</h3>
           <div className="space-y-4">
-            <input
-              required
-              placeholder="Your name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full rounded-lg border border-line bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan"
-            />
-            <input
-              required
-              type="email"
-              placeholder="Your email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full rounded-lg border border-line bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan"
-            />
-            <textarea
-              required
-              rows={4}
-              placeholder="Message"
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className="w-full resize-none rounded-lg border border-line bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan"
-            />
+            <div>
+              <input
+                placeholder="Your name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className={`w-full rounded-lg border ${
+                  errors.name ? "border-red-600" : "border-line"
+                } bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
+              />
+              {errors.name && <p className="mt-1 font-mono text-[11px] text-red-500">{errors.name}</p>}
+            </div>
+
+            <div>
+              <input
+                type="email"
+                placeholder="Your email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className={`w-full rounded-lg border ${
+                  errors.email ? "border-red-600" : "border-line"
+                } bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
+              />
+              {errors.email && <p className="mt-1 font-mono text-[11px] text-red-500">{errors.email}</p>}
+            </div>
+
+            <div>
+              <textarea
+                rows={4}
+                placeholder="Message"
+                value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })}
+                className={`w-full resize-none rounded-lg border ${
+                  errors.message ? "border-red-600" : "border-line"
+                } bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
+              />
+              {errors.message && <p className="mt-1 font-mono text-[11px] text-red-500">{errors.message}</p>}
+            </div>
           </div>
 
           <motion.button
             type="submit"
+            disabled={loading}
             whileHover={{ y: -1 }}
             whileTap={{ scale: 0.99 }}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-cyan px-5 py-3 font-mono text-xs font-medium uppercase tracking-widest text-void"
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-cyan px-5 py-3 font-mono text-xs font-medium uppercase tracking-widest text-void disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Send className="h-4 w-4" /> {sent ? "Message Queued" : "Send Message"}
+            <Send className="h-4 w-4" /> {loading ? "Sending..." : "Send Message"}
           </motion.button>
-          {sent && (
-            <p className="mt-3 text-center font-mono text-[11px] text-cyan">
-              Your email app should open with the message draft ready.
-            </p>
-          )}
         </motion.form>
       </div>
+
+      <AnimatePresence>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
