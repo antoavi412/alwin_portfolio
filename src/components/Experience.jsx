@@ -7,7 +7,7 @@ import { revealStagger, revealUp } from "../hooks/useReveal";
 export default function Experience() {
   return (
     <section id="experience" className="relative mx-auto max-w-6xl px-6 py-28">
-      <SectionHeader mod="MOD-03 · TIMELINE" title="Experience" subtitle="Roles and internships in chronological order." />
+      <SectionHeader title="Experience" />
 
       <motion.div
         variants={revealStagger(0.15)}
@@ -18,10 +18,10 @@ export default function Experience() {
       >
         {experience.map((e) => (
           <motion.div key={e.role + e.org} variants={revealUp} className="relative mb-12 last:mb-0">
-            <span className="absolute -left-[41px] top-1 flex h-6 w-6 items-center justify-center rounded-full border border-cyan/50 bg-void sm:-left-[49px]">
+            <span className="absolute -left-[41px] top-1 flex h-6 w-6 items-center justify-center rounded-full border border-cyan/50 bg-panel sm:-left-[49px]">
               <Briefcase className="h-3 w-3 text-cyan" />
             </span>
-            <div className="glass module-corner rounded-2xl p-6">
+            <div className="glass rounded-2xl p-6">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <h3 className="font-display text-lg font-semibold text-ink">{e.role}</h3>
                 <span className="font-mono text-[11px] text-cyan">{e.date}</span>

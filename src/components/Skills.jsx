@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
 import {
-  ShieldAlert,
-  Code2,
-  Network,
-  MonitorCog,
-  Wrench,
-  BookMarked,
-  X,
-} from "lucide-react";
+  ShieldBoltIcon,
+  TerminalPromptIcon,
+  MeshNodesIcon,
+  StackLayersIcon,
+  BoltIcon,
+  OpenBookIcon,
+} from "./CustomIcons";
 import { skillCategories } from "../data/profile";
 import { getSkillIcon } from "../data/skillIcons";
 import SectionHeader from "./SectionHeader";
 import { revealStagger, scaleIn, revealUp } from "../hooks/useReveal";
 
 const icons = {
-  cybersecurity: ShieldAlert,
-  programming: Code2,
-  networking: Network,
-  os: MonitorCog,
-  tools: Wrench,
-  frameworks: BookMarked,
+  cybersecurity: ShieldBoltIcon,
+  programming: TerminalPromptIcon,
+  networking: MeshNodesIcon,
+  os: StackLayersIcon,
+  tools: BoltIcon,
+  frameworks: OpenBookIcon,
 };
 
 function HexCard({ cat, onOpen }) {
@@ -31,13 +31,9 @@ function HexCard({ cat, onOpen }) {
     <motion.button
       variants={scaleIn}
       onClick={() => onOpen(cat)}
-      whileHover={{ y: -6 }}
-      className="glass module-corner group relative flex flex-col items-center gap-4 rounded-2xl p-6 text-center transition-shadow hover:shadow-[0_0_40px_rgba(34,211,238,0.15)]"
+      className="glass group relative flex flex-col items-center gap-4 rounded-2xl p-6 text-center transition-shadow hover:shadow-md"
     >
-      <div
-        className="flex h-14 w-14 items-center justify-center border border-cyan/30 bg-panel-light text-cyan transition-transform group-hover:scale-110"
-        style={{ clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)" }}
-      >
+      <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-cyan/30 bg-cyan/5 text-cyan transition-colors group-hover:bg-cyan/10">
         <Icon className="h-6 w-6" strokeWidth={1.6} />
       </div>
 
@@ -54,8 +50,8 @@ function HexCard({ cat, onOpen }) {
             <span
               key={s}
               title={s}
-              className={`flex h-7 w-7 items-center justify-center rounded-md border border-line bg-void/40 ${
-                brand ? "text-ink-dim" : "text-cyan/80"
+              className={`flex h-7 w-7 items-center justify-center rounded-md border border-line bg-panel-light ${
+                brand ? "text-ink-dim" : "text-cyan"
               }`}
             >
               <SkillIcon className="h-3.5 w-3.5" />
@@ -77,11 +73,7 @@ export default function Skills() {
 
   return (
     <section id="skills" className="relative mx-auto max-w-6xl px-6 py-28">
-      <SectionHeader
-        mod="MOD-02 · CAPABILITIES"
-        title="Skills"
-        subtitle="Real tool and technology icons — click a module to expand its contents."
-      />
+      <SectionHeader title="Skills" />
 
       <motion.div
         variants={revealStagger(0.08)}
@@ -101,7 +93,7 @@ export default function Skills() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-void/80 backdrop-blur-sm p-6"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-void/70 backdrop-blur-sm p-6"
             onClick={() => setActive(null)}
           >
             <motion.div
@@ -110,12 +102,11 @@ export default function Skills() {
               exit={{ opacity: 0, scale: 0.94, y: 12 }}
               transition={{ duration: 0.25 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass module-corner w-full max-w-xl max-h-[80vh] overflow-y-auto rounded-2xl p-8"
+              className="glass w-full max-w-xl max-h-[80vh] overflow-y-auto rounded-2xl p-8"
             >
               <div className="mb-4 flex items-start justify-between">
                 <div>
-                  <span className="font-mono text-xs text-cyan">MODULE // {active.label.toUpperCase()}</span>
-                  <h3 className="mt-1 font-display text-2xl font-semibold text-ink">{active.label}</h3>
+                  <h3 className="font-display text-2xl font-semibold text-ink">{active.label}</h3>
                 </div>
                 <button onClick={() => setActive(null)} aria-label="Close" className="text-ink-faint hover:text-cyan">
                   <X className="h-5 w-5" />
@@ -138,7 +129,7 @@ export default function Skills() {
                       className="flex items-center gap-2.5 rounded-xl border border-line bg-panel-light/50 px-3 py-2.5"
                     >
                       <span
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-void/50 ${
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-line bg-panel/50 ${
                           brand ? "text-ink" : "text-cyan"
                         }`}
                       >

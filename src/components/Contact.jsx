@@ -70,7 +70,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative mx-auto max-w-6xl px-6 py-28">
-      <SectionHeader mod="MOD-07 · CONTACT" title="Contact" subtitle="Get in touch for internships, projects, or collaboration." />
+      <SectionHeader title="Contact" />
 
       <div className="grid gap-8 lg:grid-cols-2">
         <motion.div
@@ -78,7 +78,7 @@ export default function Contact() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          className="glass module-corner rounded-2xl p-8"
+          className="glass rounded-2xl p-8"
         >
           <h3 className="mb-6 font-display text-lg font-semibold text-ink">Direct Lines</h3>
           <div className="space-y-4">
@@ -96,11 +96,9 @@ export default function Contact() {
             ))}
           </div>
           
-          <motion.button
+          <button
             onClick={copyEmailToClipboard}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg border border-cyan/40 bg-cyan/10 px-4 py-3 font-mono text-xs uppercase tracking-widest text-cyan hover:border-cyan hover:bg-cyan/20 transition-colors"
+            className="mt-6 w-full flex items-center justify-center gap-2 rounded-full border border-cyan/40 bg-cyan/5 px-4 py-3 font-mono text-xs uppercase tracking-widest text-cyan transition-colors hover:border-cyan hover:bg-cyan/10"
           >
             {copiedEmail ? (
               <>
@@ -111,7 +109,7 @@ export default function Contact() {
                 <Copy className="h-4 w-4" /> Copy Email
               </>
             )}
-          </motion.button>
+          </button>
           
           <p className="mt-6 font-mono text-[11px] text-ink-faint">{profile.location}</p>
         </motion.div>
@@ -122,7 +120,7 @@ export default function Contact() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.3 }}
-          className="glass module-corner rounded-2xl p-8"
+          className="glass rounded-2xl p-8"
         >
           <h3 className="mb-6 font-display text-lg font-semibold text-ink">Send a Message</h3>
           <div className="space-y-4">
@@ -133,7 +131,7 @@ export default function Contact() {
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className={`w-full rounded-lg border ${
                   errors.name ? "border-red-600" : "border-line"
-                } bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
+                } bg-panel px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
               />
               {errors.name && <p className="mt-1 font-mono text-[11px] text-red-500">{errors.name}</p>}
             </div>
@@ -146,7 +144,7 @@ export default function Contact() {
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className={`w-full rounded-lg border ${
                   errors.email ? "border-red-600" : "border-line"
-                } bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
+                } bg-panel px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
               />
               {errors.email && <p className="mt-1 font-mono text-[11px] text-red-500">{errors.email}</p>}
             </div>
@@ -159,7 +157,7 @@ export default function Contact() {
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className={`w-full resize-none rounded-lg border ${
                   errors.message ? "border-red-600" : "border-line"
-                } bg-void/40 px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
+                } bg-panel px-4 py-3 text-sm text-ink placeholder:text-ink-faint outline-none transition-colors focus:border-cyan`}
               />
               {errors.message && <p className="mt-1 font-mono text-[11px] text-red-500">{errors.message}</p>}
             </div>
@@ -168,9 +166,7 @@ export default function Contact() {
           <motion.button
             type="submit"
             disabled={loading}
-            whileHover={{ y: -1 }}
-            whileTap={{ scale: 0.99 }}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-cyan px-5 py-3 font-mono text-xs font-medium uppercase tracking-widest text-void disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-3 font-mono text-xs font-medium uppercase tracking-widest text-panel transition-colors hover:bg-cyan disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="h-4 w-4" /> {loading ? "Sending..." : "Send Message"}
           </motion.button>

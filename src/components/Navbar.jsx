@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShieldCheck } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const links = [
   { href: "#about", label: "About" },
@@ -8,52 +8,43 @@ const links = [
   { href: "#experience", label: "Experience" },
   { href: "#projects", label: "Projects" },
   { href: "#certifications", label: "Certifications" },
+  { href: "#resume", label: "Resume" },
   { href: "#contact", label: "Contact" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.4, duration: 0.6 }}
-      className={`fixed left-0 right-0 z-50 md:top-7 top-0 transition-all duration-300 ${
-        scrolled ? "bg-void/80 backdrop-blur-md border-b border-line/60 md:border-none md:bg-transparent" : ""
-      }`}
+    <motion.header
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="fixed inset-x-0 top-0 z-50 flex justify-center print:hidden"
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a href="#top" className="flex items-center gap-2 font-display text-sm font-semibold tracking-wide">
-          <ShieldCheck className="h-5 w-5 text-cyan" strokeWidth={1.75} />
-          ALWIN<span className="text-cyan">.SEC</span>
+      <div className="mt-4 flex w-[95%] max-w-5xl items-center justify-between gap-6 rounded-full border border-line bg-panel/85 px-6 py-3 backdrop-blur-md shadow-sm">
+        <a href="#top" className="text-xs font-semibold uppercase tracking-[0.3em] text-ink-dim transition-colors hover:text-ink">
+          Alwin
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Main navigation" className="hidden items-center gap-6 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="font-mono text-[11px] uppercase tracking-widest text-ink-dim transition-colors hover:text-cyan"
+              className="text-xs font-medium uppercase tracking-[0.2em] text-ink-dim transition-colors hover:text-cyan"
             >
               {l.label}
             </a>
           ))}
-        </div>
+        </nav>
 
         <button
           onClick={() => setOpen(true)}
-          className="text-ink md:hidden"
+          className="text-ink-dim lg:hidden"
           aria-label="Open menu"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-5 w-5" />
         </button>
       </div>
 
@@ -63,27 +54,24 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-8 bg-void/98 backdrop-blur-lg md:hidden"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-8 bg-panel/95 backdrop-blur-md lg:hidden"
           >
             <button onClick={() => setOpen(false)} className="absolute right-6 top-6" aria-label="Close menu">
               <X className="h-6 w-6 text-ink" />
             </button>
-            {links.map((l, i) => (
-              <motion.a
+            {links.map((l) => (
+              <a
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}
-                className="font-display text-2xl text-ink hover:text-cyan"
+                className="text-lg font-semibold uppercase tracking-[0.3em] text-ink-dim transition-colors hover:text-cyan"
               >
                 {l.label}
-              </motion.a>
+              </a>
             ))}
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </motion.header>
   );
 }

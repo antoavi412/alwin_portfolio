@@ -10,7 +10,7 @@ export default function Achievements() {
 
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-28">
-      <SectionHeader mod="MOD-06 · RECOGNITION" title="Achievements" />
+      <SectionHeader title="Achievements" />
 
       {achievements.map((a) => (
         <motion.div
@@ -19,45 +19,20 @@ export default function Achievements() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.4 }}
-          className="glass module-corner relative overflow-hidden rounded-2xl px-8 py-14"
+          className="glass relative overflow-hidden rounded-2xl px-8 py-14"
         >
-          <div
-            className="pointer-events-none absolute inset-0 opacity-60"
-            style={{
-              background:
-                "radial-gradient(circle at 50% 30%, rgba(245,158,11,0.18), transparent 60%)",
-            }}
-          />
-
-          {[...Array(10)].map((_, i) => (
-            <motion.span
-              key={i}
-              className="absolute h-1 w-1 rounded-full bg-amber"
-              style={{ left: `${10 + Math.random() * 80}%`, top: `${20 + Math.random() * 60}%` }}
-              animate={{ opacity: [0, 1, 0], y: [0, -20 - Math.random() * 30] }}
-              transition={{ duration: 2.5 + Math.random() * 2, repeat: Infinity, delay: i * 0.3 }}
-            />
-          ))}
-
           <div className="relative flex flex-col items-center">
             {a.image ? (
-              <>
-                <motion.img
-                  src={a.image}
-                  alt={a.title}
-                  onClick={() => setSelectedImage(a)}
-                  className="mb-6 h-48 w-full max-w-sm rounded-xl object-cover cursor-pointer border border-amber/30 hover:border-amber/60 transition-colors"
-                  whileHover={{ scale: 1.02 }}
-                />
-              </>
+              <img
+                src={a.image}
+                alt={a.title}
+                onClick={() => setSelectedImage(a)}
+                className="mb-6 h-48 w-full max-w-sm rounded-xl object-cover cursor-pointer border border-amber/30 transition-colors hover:border-amber/60"
+              />
             ) : (
-              <motion.div
-                animate={{ rotate: [0, -6, 6, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-amber/40 bg-amber/10"
-              >
+              <div className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-amber/40 bg-amber/10">
                 <Trophy className="h-8 w-8 text-amber" strokeWidth={1.6} />
-              </motion.div>
+              </div>
             )}
 
             <h3 className="relative font-display text-2xl font-semibold text-ink sm:text-3xl text-center">
@@ -85,7 +60,7 @@ export default function Achievements() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setSelectedImage(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-void/80 p-4"
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -95,7 +70,7 @@ export default function Achievements() {
           >
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 text-cyan hover:text-white transition-colors"
+              className="absolute -top-12 right-0 text-cyan hover:text-ink transition-colors"
             >
               <X className="h-6 w-6" />
             </button>

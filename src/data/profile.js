@@ -16,10 +16,11 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/alwin-roshan-i",
   github: "https://github.com/alwin905",
   profileImage: `${import.meta.env.BASE_URL}alwin-profile.jpeg`,
+  resume: `${import.meta.env.BASE_URL}resume.pdf`,
   summary:
     "Cybersecurity student experienced in penetration testing, vulnerability assessment, and system security. Skilled with industry tools and platforms like HTB and TryHackMe. Eager to enhance skills through internships and teamwork.",
   longSummary:
-    "I'm someone who wants to learn about cybersecurity and protect the digital world. I'm committed to building essential skills and making the internet safer. I'm curious about solving cybersecurity mysteries — right now I'm learning the basics and excited to be part of the digital security community.",
+    "Cybersecurity enthusiast focused on penetration testing, vulnerability assessment, and system security. Pursuing hands-on experience through internships and real-world projects.",
 };
 
 export const stats = [
@@ -35,14 +36,12 @@ export const education = [
     location: "Chennai",
     degree: "B.E. Computer and Communication Engineering",
     date: "Sep 2023 – May 2027",
-    detail: "CGPA: 7.52",
   },
   {
     school: "Sacred Heart Convent Anglo Indian Hr. Sec. School",
     location: "Villupuram",
     degree: "Higher Secondary Certificate (HSC)",
     date: "Mar 2023",
-    detail: "Percentage: 72%",
   },
 ];
 
